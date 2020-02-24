@@ -22,4 +22,5 @@ $command = $containerBuilder->get(TestSpeedCommand::class);
 
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);
+
 $application->run();
