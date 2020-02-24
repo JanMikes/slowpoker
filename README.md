@@ -2,14 +2,19 @@
 
 Runs Apache Benchmark to measure speed of application.
 
+## Requirements:
+- PHP 7.3 and higher
+- [Apache Bench](https://httpd.apache.org/docs/2.4/programs/ab.html)
+- Git repository (for *find slow commit* feature)
+
 ## Install
-1. Git clone
-2. `composer install`
+
+- `composer require janmikes/slowpoker`
 
 ## Features
 - Clears cache
 - Optimizes composer autoloader
-- Cleans git repository when done
+- Cleans changes in git repository when done
 
 ## Usage
 
@@ -39,5 +44,9 @@ git bisect run <TESTER>
 Minimum example, when I know current commit is slow (80ms) and commit `647b912` was fast (72ms) and I want to find out which commit made it slower >73ms:
 ```
 git bisect start HEAD 647b912
-git bisect run /some-path/bin/speed-test --wc=17 --maxSpeed=73
+git bisect run /some-path/bin/speed-test --maxSpeed=73
 ```
+
+--- 
+
+This package was sponsored by [Glami](https://glami.cz), thank you!

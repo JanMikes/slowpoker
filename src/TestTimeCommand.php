@@ -49,11 +49,11 @@ final class TestTimeCommand extends Command
 
 		$this->discardGitChanges($workingDirectory);
 
-		if ($speed > $maxSpeed) {
-			return 1;
+		if ($maxSpeed === null) {
+			return 0;
 		}
 
-		return 0;
+		return $speed > $maxSpeed ? 1 : 0;
 	}
 
 
@@ -120,13 +120,13 @@ final class TestTimeCommand extends Command
 	}
 
 
-	private function getMaxSpeedOptionValue(InputInterface $input): int
+	private function getMaxSpeedOptionValue(InputInterface $input): ?int
 	{
 		/** @var string|null $maxSpeed */
 		$maxSpeed = $input->getOption('maxSpeed');
 
 		if ($maxSpeed === null) {
-			throw new \LogicException('Please provide maxSpeed option.');
+			return null;
 		}
 
 		return (int) $maxSpeed;
