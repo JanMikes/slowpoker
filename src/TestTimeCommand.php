@@ -14,7 +14,8 @@ final class TestTimeCommand extends Command
 {
 	protected function configure(): void
 	{
-		$this->setName('test');
+		$this->setName('speed');
+		$this->setDescription('Measure current speed (response time)');
 
 		$this->addOption('maxSpeed', null, InputOption::VALUE_REQUIRED, 'Max allowed response time, if not met (is higher) will exit as error');
 		$this->addOption('requests', null, InputOption::VALUE_REQUIRED, 'Number of HTTP requests made', 1000);

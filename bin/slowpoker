@@ -3,13 +3,23 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use JanMikes\Slowpoker\FindSlowCommitCommand;
 use JanMikes\Slowpoker\TestTimeCommand;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-$application = new Application('Test speed', '0.1');
-$command = new TestTimeCommand();
+$containerBuilder = new ContainerBuilder();
 
-$application->add($command);
-$application->setDefaultCommand($command->getName(), true);
+$loader = new YamlFileLoader($containerBuilder, new FileLocator());
+$loader->load(__DIR__ . '/../config/services.yaml');
+
+$containerBuilder->compile();
+
+$application = new Application('Slowpoker', '0.1');
+
+$application->add($containerBuilder->get(TestTimeCommand::class));
+$application->add($containerBuilder->get(FindSlowCommitCommand::class));
 
 $application->run();

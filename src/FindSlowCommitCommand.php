@@ -12,6 +12,7 @@ final class FindSlowCommitCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('find');
+		$this->setDescription('Find commit that slowed application');
 
 		$this->addOption('bad', null, InputOption::VALUE_REQUIRED, 'Bad revision (for git bisect)');
 		$this->addOption('good', null, InputOption::VALUE_REQUIRED, 'Good revision (for git bisect)');
