@@ -25,18 +25,14 @@ final class TestSpeedCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		$maxSpeed = $input->getOption('maxSpeed');
+		$maxSpeed = $this->getMaxSpeedOptionValue($input);
+		$url = $this->getUrlOptionValue($input);
+
+		/** @var string $numberOfRequests */
 		$numberOfRequests = $input->getOption('requests');
+
+		/** @var string|null $cacheDirectory */
 		$cacheDirectory = $input->getOption('cacheDir');
-		$url = $input->getOption('url');
-
-		if ($maxSpeed === null) {
-			throw new \LogicException('Please provide maxSpeed option.');
-		}
-
-		if ($url === null) {
-			throw new \LogicException('Please provide url option.');
-		}
 
 		if ($cacheDirectory !== null) {
 			$this->clearCache($cacheDirectory);
@@ -45,11 +41,11 @@ final class TestSpeedCommand extends Command
 		$this->optimizeComposerAutoload();
 
 		$speed = $this->getMeasuredSpeed($numberOfRequests, $url);
-		$output->writeln(sprintf('Measured speed: %s ms', $speed));
+		$output->writeln(sprintf('Measured speed: %d ms', $speed));
 
 		$this->discardGitChanges();
 
-		if ((int) $speed > (int) $maxSpeed) {
+		if ($speed > $maxSpeed) {
 			return 1;
 		}
 
@@ -57,7 +53,7 @@ final class TestSpeedCommand extends Command
 	}
 
 
-	private function getMeasuredSpeed(string $numberOfRequests, string $url): string
+	private function getMeasuredSpeed(string $numberOfRequests, string $url): int
 	{
 		$speedTestProcess = new Process([
 			'ab',
@@ -81,7 +77,7 @@ final class TestSpeedCommand extends Command
 			throw new \RuntimeException('Could not detect speed from AB output');
 		}
 
-		return $matches['speed'];
+		return (int) $matches['speed'];
 	}
 
 
@@ -113,5 +109,31 @@ final class TestSpeedCommand extends Command
 		]);
 
 		$process->mustRun();
+	}
+
+
+	private function getMaxSpeedOptionValue(InputInterface $input): int
+	{
+		/** @var string|null $maxSpeed */
+		$maxSpeed = $input->getOption('maxSpeed');
+
+		if ($maxSpeed === null) {
+			throw new \LogicException('Please provide maxSpeed option.');
+		}
+
+		return (int) $maxSpeed;
+	}
+
+
+	private function getUrlOptionValue(InputInterface $input): string
+	{
+		/** @var string|null $url */
+		$url = $input->getOption('url');
+
+		if ($url === null) {
+			throw new \LogicException('Please provide url option.');
+		}
+
+		return $url;
 	}
 }
