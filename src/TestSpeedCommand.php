@@ -22,7 +22,7 @@ final class TestSpeedCommand extends Command
 	{
 		$this->setName('test-speed');
 
-		$this->addOption('maxSpeed', null, InputOption::VALUE_REQUIRED, 'Max allowed response, if not met (is higher) will exit as error');
+		$this->addOption('maxSpeed', null, InputOption::VALUE_REQUIRED, 'Max allowed response time, if not met (is higher) will exit as error');
 		$this->addOption('wc', null, InputOption::VALUE_REQUIRED, 'Number of working copy to test');
 		$this->addOption('requests', null, InputOption::VALUE_REQUIRED, 'Number of HTTP requests made', 2000);
 		$this->addOption('url', null, InputOption::VALUE_REQUIRED, 'URL to test speed with (glami.cz will be replaced with your working copy)', 'http://www.glami.cz/damske-baleriny/?original');
