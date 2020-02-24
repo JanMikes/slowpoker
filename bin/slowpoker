@@ -3,7 +3,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use JanMikes\SpeedTest\TestSpeedCommand;
+use JanMikes\Slowpoker\TestSpeedCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Test speed', '0.1');

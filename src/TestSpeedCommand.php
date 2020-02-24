@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-namespace JanMikes\SpeedTest;
+namespace JanMikes\Slowpoker;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
