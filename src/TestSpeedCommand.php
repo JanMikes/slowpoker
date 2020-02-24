@@ -19,7 +19,8 @@ final class TestSpeedCommand extends Command
 		$this->addOption('maxSpeed', null, InputOption::VALUE_REQUIRED, 'Max allowed response time, if not met (is higher) will exit as error');
 		$this->addOption('requests', null, InputOption::VALUE_REQUIRED, 'Number of HTTP requests made', 1000);
 		$this->addOption('url', null, InputOption::VALUE_REQUIRED, 'URL to test speed with');
-		$this->addOption('cacheDir', null, InputOption::VALUE_REQUIRED, 'Relative path to cache directory', );
+		$this->addOption('cacheDir', null, InputOption::VALUE_REQUIRED, 'Relative path to cache directory');
+		$this->addOption('workingDirectory', null, InputOption::VALUE_REQUIRED, 'Working directory of the repository, useful when running outside of it and therefore can not be detected automatically');
 	}
 
 
@@ -34,16 +35,19 @@ final class TestSpeedCommand extends Command
 		/** @var string|null $cacheDirectory */
 		$cacheDirectory = $input->getOption('cacheDir');
 
+		/** @var string|null $workingDirectory */
+		$workingDirectory = $input->getOption('workingDirectory');
+
 		if ($cacheDirectory !== null) {
-			$this->clearCache($cacheDirectory);
+			$this->clearCache($cacheDirectory, $workingDirectory);
 		}
 
-		$this->optimizeComposerAutoload();
+		$this->optimizeComposerAutoload($workingDirectory);
 
 		$speed = $this->getMeasuredSpeed($numberOfRequests, $url);
 		$output->writeln(sprintf('Measured speed: %d ms', $speed));
 
-		$this->discardGitChanges();
+		$this->discardGitChanges($workingDirectory);
 
 		if ($speed > $maxSpeed) {
 			return 1;
@@ -81,32 +85,36 @@ final class TestSpeedCommand extends Command
 	}
 
 
-	private function clearCache(string $cacheDirectory): void
+	private function clearCache(string $cacheDirectory, ?string $workingDirectory): void
 	{
+		if ($workingDirectory) {
+			$cacheDirectory = $workingDirectory . '/' . $cacheDirectory;
+		}
+
 		FileSystem::delete($cacheDirectory);
 	}
 
 
-	private function optimizeComposerAutoload(): void
+	private function optimizeComposerAutoload(?string $workingDirectory): void
 	{
 		$process = new Process([
 			'composer',
 			'dump-autoload',
 			'-o',
 			'-a'
-		]);
+		], $workingDirectory);
 
 		$process->mustRun();
 	}
 
 
-	private function discardGitChanges(): void
+	private function discardGitChanges(?string $workingDirectory): void
 	{
 		$process = new Process([
 			'git',
 			'reset',
 			'--hard',
-		]);
+		], $workingDirectory);
 
 		$process->mustRun();
 	}
