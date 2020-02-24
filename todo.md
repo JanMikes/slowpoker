@@ -5,3 +5,4 @@
 - [ ] Optional discard local changes
 - [ ] Optional optimize composer autoloader
 - [ ] Better UX - some messages to the user, inform what is going on
+- [ ] Docker image
