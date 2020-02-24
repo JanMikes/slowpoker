@@ -12,51 +12,42 @@ use Symfony\Component\Process\Process;
 
 final class TestSpeedCommand extends Command
 {
-	/**
-	 * @var string
-	 */
-	private const WORKING_COPIES_PATH = '/home/users/klarka/wc';
-
-
 	protected function configure(): void
 	{
 		$this->setName('test-speed');
 
 		$this->addOption('maxSpeed', null, InputOption::VALUE_REQUIRED, 'Max allowed response time, if not met (is higher) will exit as error');
-		$this->addOption('wc', null, InputOption::VALUE_REQUIRED, 'Number of working copy to test');
-		$this->addOption('requests', null, InputOption::VALUE_REQUIRED, 'Number of HTTP requests made', 2000);
-		$this->addOption('url', null, InputOption::VALUE_REQUIRED, 'URL to test speed with (glami.cz will be replaced with your working copy)', 'http://www.glami.cz/damske-baleriny/?original');
-		$this->addOption('cacheDir', null, InputOption::VALUE_REQUIRED, 'Relative path to cache directory', 'temp/cache');
+		$this->addOption('requests', null, InputOption::VALUE_REQUIRED, 'Number of HTTP requests made', 1000);
+		$this->addOption('url', null, InputOption::VALUE_REQUIRED, 'URL to test speed with');
+		$this->addOption('cacheDir', null, InputOption::VALUE_REQUIRED, 'Relative path to cache directory', );
 	}
 
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		$wc = $input->getOption('wc');
 		$maxSpeed = $input->getOption('maxSpeed');
 		$numberOfRequests = $input->getOption('requests');
 		$cacheDirectory = $input->getOption('cacheDir');
-
-		if ($wc === null) {
-			throw new \LogicException('Please provide wc option.');
-		}
+		$url = $input->getOption('url');
 
 		if ($maxSpeed === null) {
 			throw new \LogicException('Please provide maxSpeed option.');
 		}
 
-		// http://www.glami.cz/damske-baleriny/?original -> http://www.17.devklarka.cz/damske-baleriny/?original
-		$url = str_replace('glami.cz', $wc . '.devklarka.cz', $input->getOption('url'));
+		if ($url === null) {
+			throw new \LogicException('Please provide url option.');
+		}
 
-		$workingDirectory = self::WORKING_COPIES_PATH . '/' . $wc;
+		if ($cacheDirectory !== null) {
+			$this->clearCache($cacheDirectory);
+		}
 
-		$this->clearCache($workingDirectory . '/' . $cacheDirectory);
-		$this->optimizeComposerAutoload($workingDirectory);
+		$this->optimizeComposerAutoload();
 
-		$speed = $this->getMeasuredSpeed($numberOfRequests, $url, $workingDirectory);
-		$output->writeln(sprintf('Measured %s ms', $speed));
+		$speed = $this->getMeasuredSpeed($numberOfRequests, $url);
+		$output->writeln(sprintf('Measured speed: %s ms', $speed));
 
-		$this->discardGitChanges($workingDirectory);
+		$this->discardGitChanges();
 
 		if ((int) $speed > (int) $maxSpeed) {
 			return 1;
@@ -66,7 +57,7 @@ final class TestSpeedCommand extends Command
 	}
 
 
-	private function getMeasuredSpeed(string $numberOfRequests, string $url, string $workingDirectory): string
+	private function getMeasuredSpeed(string $numberOfRequests, string $url): string
 	{
 		$speedTestProcess = new Process([
 			'ab',
@@ -74,12 +65,14 @@ final class TestSpeedCommand extends Command
 			'-n', $numberOfRequests,
 			'-S',
 			'-k',
-			'-H', 'XHttpTest: 1',
-			'-H', 'X-No-Debug: 1',
-			'-H', 'User-Agent: GlamiTest',
+			'-H', 'XHttpTest: 1', // TODO: has to be parametrized
+			'-H', 'X-No-Debug: 1', // TODO: has to be parametrized
+			'-H', 'User-Agent: GlamiTest', // TODO: has to be parametrized
 			$url,
-		], $workingDirectory, null, null, null);
+		]);
 
+		// Apache Benchmark can take long time to complete, depending on number of requests
+		$speedTestProcess->setTimeout(null);
 		$speedTestProcess->mustRun();
 
 		$matches = Strings::match($speedTestProcess->getOutput(), '/Total:[\s]+(?<speed>\d+)/');
@@ -98,26 +91,26 @@ final class TestSpeedCommand extends Command
 	}
 
 
-	private function optimizeComposerAutoload(string $workingDirectory): void
+	private function optimizeComposerAutoload(): void
 	{
 		$process = new Process([
 			'composer',
 			'dump-autoload',
 			'-o',
 			'-a'
-		], $workingDirectory);
+		]);
 
 		$process->mustRun();
 	}
 
 
-	private function discardGitChanges(string $workingDirectory): void
+	private function discardGitChanges(): void
 	{
 		$process = new Process([
 			'git',
 			'reset',
 			'--hard',
-		], $workingDirectory);
+		]);
 
 		$process->mustRun();
 	}

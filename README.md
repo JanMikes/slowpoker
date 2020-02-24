@@ -7,7 +7,6 @@ Runs Apache Benchmark to measure speed of application.
 2. `composer install`
 
 ## Features
-- Replaces `glami.cz` with your working copy in tested url
 - Clears cache
 - Optimizes composer autoloader
 - Cleans git repository when done
@@ -19,7 +18,6 @@ bin/test-speed [options]
 
 Options:
       --maxSpeed=MAXSPEED  Max allowed response time, if not met (is higher) will exit as error
-      --wc=WC              Number of working copy to test
       --requests=REQUESTS  Number of HTTP requests made [default: 2000]
       --url=URL            URL to test speed with (glami.cz will be replaced with your working copy) [default: "http://www.glami.cz/damske-baleriny/?original"]
       --cacheDir=CACHEDIR  Relative path to cache directory [default: "temp/cache"]
