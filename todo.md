@@ -1,0 +1,7 @@
+- [ ] Bisect wrapping console command
+- [ ] Custom headers/parameters for apache benchmark
+- [ ] Configuration of tool from yaml (overwrittable from command line)
+- [ ] No longer single command application
+- [ ] Optional discard local changes
+- [ ] Optional optimize composer autoloader
+- [ ] Better UX - some messages to the user, inform what is going on

@@ -61,7 +61,6 @@ final class TestTimeCommand extends Command
 	{
 		$speedTestProcess = new Process([
 			'ab',
-			'-c1',
 			'-n', $numberOfRequests,
 			'-S',
 			'-k',
