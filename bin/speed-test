@@ -4,21 +4,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Glami\SpeedTest\TestSpeedCommand;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-
-$containerBuilder = new ContainerBuilder();
-
-$loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__ . '/../config'));
-$loader->load('services.yaml');
-
-$containerBuilder->compile();
 
 $application = new Application('Test speed', '0.1');
-
-$command = $containerBuilder->get(TestSpeedCommand::class);
+$command = new TestSpeedCommand();
 
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);

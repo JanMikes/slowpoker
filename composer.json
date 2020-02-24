@@ -1,27 +1,28 @@
 {
     "name": "glami/speed-test",
-    "type": "project",
-    "require": {
-        "php": ">=7.3",
-        "symfony/console": "^5.0",
-        "symfony/process": "^5.0",
-        "symfony/dependency-injection": "^5.0",
-        "symfony/config": "^5.0",
-        "symfony/yaml": "^5.0",
-        "nette/utils": "^3.1"
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-master"
-    },
-    "license": "proprietary",
+    "type": "library",
+    "description": "",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Jan Mikeš",
             "email": "jan.mikes@glami.cz"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "bin": [
+        "bin/speed-test"
+    ],
+    "require": {
+        "php": ">=7.3",
+        "symfony/console": "^5.0",
+        "symfony/process": "^5.0",
+        "nette/utils": "^3.1"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Glami\\SpeedTest\\": "src"
