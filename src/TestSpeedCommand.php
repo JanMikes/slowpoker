@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-namespace Glami\SpeedTest;
+namespace JanMikes\SpeedTest;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;

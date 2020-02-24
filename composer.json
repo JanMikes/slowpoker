@@ -1,5 +1,5 @@
 {
-    "name": "glami/speed-test",
+    "name": "janmikes/slowpoker",
     "type": "library",
     "description": "",
     "license": "MIT",
@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "Jan Mikeš",
-            "email": "jan.mikes@glami.cz"
+            "email": "j.mikes@me.com"
         }
     ],
     "bin": [
@@ -26,7 +26,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Glami\\SpeedTest\\": "src"
+            "JanMikes\\SpeedTest\\": "src"
         }
+    },
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyse"
     }
 }
