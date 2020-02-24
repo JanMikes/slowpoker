@@ -3,11 +3,11 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use JanMikes\Slowpoker\TestSpeedCommand;
+use JanMikes\Slowpoker\TestTimeCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Test speed', '0.1');
-$command = new TestSpeedCommand();
+$command = new TestTimeCommand();
 
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);
