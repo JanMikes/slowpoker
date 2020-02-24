@@ -4,7 +4,10 @@
     "require": {
         "php": ">=7.3",
         "symfony/console": "^5.0",
-        "symfony/process": "^5.0"
+        "symfony/process": "^5.0",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/config": "^5.0",
+        "symfony/yaml": "^5.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"
