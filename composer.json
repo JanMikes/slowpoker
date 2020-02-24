@@ -1,0 +1,26 @@
+{
+    "name": "glami/speed-test",
+    "type": "project",
+    "require": {
+        "php": ">=7.3",
+        "symfony/console": "^5.0",
+        "symfony/process": "^5.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Jan Mikeš",
+            "email": "jan.mikes@glami.cz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Glami\\SpeedTest\\": "src"
+        }
+    }
+}
