@@ -6,3 +6,11 @@ services:
 
   JanMikes\Slowpoker\TestTimeCommand: ~
   JanMikes\Slowpoker\FindSlowCommitCommand: ~
+
+  Symfony\Component\Console\Application:
+    arguments:
+      - 'Slowpoker'
+      - '0.1'
+    calls:
+      - [add, ['@JanMikes\Slowpoker\TestTimeCommand']]
+      - [add, ['@JanMikes\Slowpoker\FindSlowCommitCommand']]
