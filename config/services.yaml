@@ -2,12 +2,12 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: true
 
-  JanMikes\Slowpoker\TestTimeCommand: ~
-  JanMikes\Slowpoker\FindSlowCommitCommand: ~
+  JanMikes\Slowpoker\:
+    resource: '../src/*'
 
   Symfony\Component\Console\Application:
+    public: true
     arguments:
       - 'Slowpoker'
       - '0.1'
